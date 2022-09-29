@@ -131,3 +131,4 @@ jobs:
   #       shell: bash
   #       run: |
   #         bash build.sh
+  #         test
