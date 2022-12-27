@@ -266,15 +266,19 @@ static int gif_image_write_image(AVCodecContext *avctx,
     int x_start = 0, y_start = 0, trans = s->transparent_index;
     int bcid = -1, honor_transparency = (s->flags & GF_TRANSDIFF) && s->last_frame && !palette;
     const uint8_t *ptr;
-
+    // 기존 조건문
+    // if (!s->image && avctx->frame_number && is_image_translucent(avctx, buf, linesize)) {
     if (!s->image && is_image_translucent(avctx, buf, linesize)) {
+        // translucent: 투명한
         gif_crop_translucent(avctx, buf, linesize, &width, &height, &x_start, &y_start);
         honor_transparency = 0;
         disposal = GCE_DISPOSAL_BACKGROUND;
-    } else {
-        gif_crop_opaque(avctx, palette, buf, linesize, &width, &height, &x_start, &y_start);
-        disposal = GCE_DISPOSAL_INPLACE;
-    }
+        }
+//     } else {
+//         // opaque: 불투명한
+//         gif_crop_opaque(avctx, palette, buf, linesize, &width, &height, &x_start, &y_start);
+//         disposal = GCE_DISPOSAL_INPLACE;
+//     }
 
     if (s->image || !avctx->frame_number) { /* GIF header */
         const uint32_t *global_palette = palette ? palette : s->palette;
